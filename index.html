@@ -3,72 +3,594 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRN Creative Design | Mimari & Tasarım</title>
+<meta name="description" content="Villa, ofis, plaza ve premium yaşam alanlarında özgün mimari çözümler.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
 
-<title>CRN Creative Design</title>
+/* ── DEĞIŞKENLER ── */
+:root {
+  --gold:      #c9a96e;
+  --gold-lt:   #e8d5a3;
+  --black:     #060606;
+  --dark:      #0d0d0d;
+  --dark2:     #111;
+  --dark3:     #161616;
+  --serif:     'Cormorant Garamond', Georgia, serif;
+  --sans:      'Montserrat', sans-serif;
+  --nav-h:     80px;
+  --pad:       clamp(72px,10vw,130px) 6%;
+}
 
-<meta name="description" content="Premium Mimarlık ve İç Mimarlık Hizmetleri">
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--black);color:#fff;font-family:var(--sans);font-weight:300;overflow-x:hidden;}
+img{display:block;width:100%;height:100%;object-fit:cover;}
+a{text-decoration:none;}
+button{cursor:pointer;font-family:var(--sans);border:none;background:none;}
+ul{list-style:none;}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+/* ── PAYLAŞILAN ── */
+.eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.eyebrow span{font-size:10px;font-weight:400;letter-spacing:4px;text-transform:uppercase;color:var(--gold);}
+.eline{width:40px;height:.5px;background:var(--gold);flex-shrink:0;}
+.stitle{font-family:var(--serif);font-size:clamp(32px,5vw,60px);font-weight:300;line-height:1.1;margin-bottom:24px;}
+.stitle em{font-style:italic;color:var(--gold);}
+.btn-g{display:inline-block;background:var(--gold);color:var(--black);font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;padding:16px 40px;transition:background .3s;}
+.btn-g:hover{background:var(--gold-lt);}
+.btn-o{display:inline-flex;align-items:center;gap:10px;background:transparent;color:rgba(255,255,255,.65);font-size:10px;font-weight:400;letter-spacing:3px;text-transform:uppercase;padding:16px 36px;border:.5px solid rgba(255,255,255,.2);transition:border-color .3s,color .3s;}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);}
+.wdot{width:10px;height:10px;background:#25d366;border-radius:50%;flex-shrink:0;}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .75s ease,transform .75s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
 
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+/* ════════ MATRIX INTRO ════════ */
+#intro{position:fixed;inset:0;background:#000;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;}
+#mcanvas{position:absolute;inset:0;opacity:.55;}
+#mlogo{position:relative;z-index:2;text-align:center;opacity:0;transition:opacity .9s ease;}
+#mlogo.vis{opacity:1;}
+#mlogo .big{font-family:var(--serif);font-size:clamp(54px,13vw,108px);font-weight:300;letter-spacing:clamp(8px,3vw,22px);color:var(--gold);text-shadow:0 0 40px rgba(201,169,110,.6),0 0 80px rgba(201,169,110,.25);display:block;}
+#mlogo .mid{font-size:clamp(11px,2.5vw,15px);font-weight:300;letter-spacing:clamp(6px,2vw,14px);color:rgba(255,255,255,.5);text-transform:uppercase;display:block;margin-top:14px;}
+#mlogo .sm{font-size:clamp(9px,1.5vw,11px);letter-spacing:4px;color:rgba(201,169,110,.4);margin-top:20px;display:block;text-transform:uppercase;}
+#mbar-wrap{position:absolute;bottom:56px;left:50%;transform:translateX(-50%);width:min(220px,60vw);height:1px;background:rgba(255,255,255,.07);z-index:2;}
+#mbar{height:100%;background:var(--gold);width:0%;box-shadow:0 0 8px rgba(201,169,110,.7);}
+#mskip{position:absolute;bottom:26px;right:26px;font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;z-index:2;padding:8px;transition:color .3s;}
+#mskip:hover{color:rgba(255,255,255,.5);}
 
-<link rel="stylesheet" href="style.css">
+/* ════════ MAIN SITE ════════ */
+#site{opacity:0;transition:opacity 1.2s ease;}
+#site.vis{opacity:1;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 6%;background:rgba(6,6,6,.82);backdrop-filter:blur(20px);border-bottom:.5px solid rgba(201,169,110,.1);transition:height .3s,background .3s;}
+nav.sc{height:62px;background:rgba(6,6,6,.97);}
+.nlogo{font-family:var(--serif);font-size:20px;font-weight:300;letter-spacing:5px;color:#fff;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.nlogo span{color:var(--gold);}
+.nlinks{display:flex;gap:36px;}
+.nlink{font-size:10px;font-weight:400;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.45);position:relative;padding-bottom:4px;transition:color .3s;}
+.nlink::after{content:'';position:absolute;bottom:0;left:0;width:0;height:.5px;background:var(--gold);transition:width .3s;}
+.nlink:hover{color:var(--gold);}
+.nlink:hover::after{width:100%;}
+.nright{display:flex;align-items:center;gap:18px;}
+.langb{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.3);}
+.ncta{font-size:9px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--black);background:var(--gold);padding:10px 22px;white-space:nowrap;transition:background .3s;}
+.ncta:hover{background:var(--gold-lt);}
+
+/* hamburger */
+.hburger{display:none;flex-direction:column;gap:5px;z-index:600;padding:6px;}
+.hburger span{display:block;width:24px;height:1.5px;background:#fff;transition:transform .3s,opacity .3s;}
+.hburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);}
+.hburger.open span:nth-child(2){opacity:0;}
+.hburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);}
+.novl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:490;}
+.novl.show{display:block;}
+
+/* ── HERO ── */
+#home{position:relative;height:100svh;min-height:600px;display:flex;align-items:center;overflow:hidden;}
+.hmedia{position:absolute;inset:0;}
+.hmedia video{width:100%;height:100%;object-fit:cover;opacity:.38;}
+.hfallback{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80') center/cover no-repeat;opacity:.35;display:none;}
+.hfallback.show{display:block;}
+.hovl{position:absolute;inset:0;background:linear-gradient(110deg,rgba(6,6,6,.94) 0%,rgba(6,6,6,.68) 52%,rgba(6,6,6,.4) 100%);}
+.hgrid{position:absolute;inset:0;opacity:.03;background-image:repeating-linear-gradient(0deg,transparent,transparent 79px,rgba(255,255,255,1) 80px),repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(255,255,255,1) 80px);}
+.hcontent{position:relative;z-index:5;padding:0 6%;max-width:min(700px,90vw);margin-top:var(--nav-h);}
+.htitle{font-family:var(--serif);font-size:clamp(40px,6.5vw,80px);font-weight:300;line-height:1.08;margin-bottom:22px;opacity:0;animation:fup .9s ease .4s forwards;}
+.htitle em{font-style:italic;color:var(--gold);}
+.hcontent .eyebrow{opacity:0;animation:fup .9s ease .2s forwards;}
+.hdesc{font-size:clamp(13px,1.4vw,14px);font-weight:300;line-height:2;color:rgba(255,255,255,.62);margin-bottom:42px;max-width:440px;opacity:0;animation:fup .9s ease .6s forwards;}
+.hbtns{display:flex;flex-wrap:wrap;gap:14px;opacity:0;animation:fup .9s ease .8s forwards;}
+.hstats{position:absolute;bottom:clamp(40px,6vh,70px);right:6%;z-index:5;display:flex;gap:clamp(28px,5vw,60px);opacity:0;animation:fup .9s ease 1.1s forwards;}
+.stat .n{font-family:var(--serif);font-size:clamp(34px,5vw,50px);font-weight:300;color:var(--gold);line-height:1;}
+.stat .l{font-size:clamp(7px,1vw,9px);letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:7px;display:block;}
+.hscroll{position:absolute;bottom:clamp(40px,6vh,70px);left:6%;z-index:5;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fin 1s ease 1.6s forwards;}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:bounce 1.6s ease infinite;}
+.sline{width:.5px;height:56px;background:linear-gradient(to bottom,var(--gold),transparent);}
+
+/* ── ABOUT ── */
+#about{padding:var(--pad);background:var(--dark);display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,100px);align-items:center;}
+.aimgs{position:relative;height:clamp(340px,50vw,600px);}
+.aimg1{position:absolute;top:0;left:0;width:80%;height:75%;object-fit:cover;filter:brightness(.82);}
+.aimg2{position:absolute;bottom:0;right:0;width:54%;height:46%;object-fit:cover;border:3px solid var(--dark);filter:brightness(.82);}
+.abadge{position:absolute;bottom:52px;left:-12px;background:var(--gold);color:var(--black);padding:20px 24px;z-index:2;text-align:center;}
+.abadge .bn{font-family:var(--serif);font-size:36px;font-weight:300;line-height:1;display:block;}
+.abadge .bl{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:500;margin-top:4px;display:block;}
+.atxt p{font-size:14px;line-height:2;color:rgba(255,255,255,.62);margin-bottom:16px;}
+.alist{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:30px;}
+.alist li{display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.55);}
+.alist li::before{content:'';width:20px;height:.5px;background:var(--gold);flex-shrink:0;}
+
+/* ── SERVICES ── */
+#services{padding:var(--pad);background:var(--black);}
+.svhead{margin-bottom:52px;}
+.svgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;}
+.scard{position:relative;height:clamp(300px,40vw,480px);overflow:hidden;cursor:pointer;}
+.scard img{width:100%;height:100%;object-fit:cover;transition:transform .8s,filter .5s;filter:brightness(.48) saturate(.7);}
+.scard:hover img{transform:scale(1.06);filter:brightness(.28) saturate(.5);}
+.sbody{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:clamp(20px,4vw,38px) clamp(18px,3vw,30px);background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 65%);}
+.snum{font-family:var(--serif);font-size:52px;font-weight:300;color:rgba(201,169,110,.1);position:absolute;top:18px;right:18px;line-height:1;transition:color .4s;}
+.scard:hover .snum{color:rgba(201,169,110,.32);}
+.stcard{font-family:var(--serif);font-size:clamp(18px,2.5vw,24px);font-weight:300;color:#fff;margin-bottom:8px;}
+.sdesc{font-size:12px;line-height:1.85;color:rgba(255,255,255,.6);max-height:0;overflow:hidden;opacity:0;transition:max-height .5s,opacity .4s;}
+.scard:hover .sdesc{max-height:100px;opacity:1;}
+.smore{display:inline-block;margin-top:12px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:0;transition:opacity .3s .15s;}
+.scard:hover .smore{opacity:1;}
+
+/* ── PROJECTS ── */
+#projects{padding:var(--pad);background:var(--dark2);}
+.phead{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:20px;margin-bottom:52px;}
+.ftabs{display:flex;gap:4px;flex-wrap:wrap;}
+.ftab{font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:10px 18px;border:.5px solid rgba(255,255,255,.12);color:rgba(255,255,255,.35);transition:all .3s;}
+.ftab.on,.ftab:hover{background:var(--gold);color:var(--black);border-color:var(--gold);}
+.pgrid{display:grid;grid-template-columns:repeat(12,1fr);gap:12px;}
+.pcard{position:relative;overflow:hidden;cursor:pointer;}
+.pcard.lg{grid-column:span 7;height:clamp(240px,35vw,500px);}
+.pcard.sm{grid-column:span 5;height:clamp(240px,35vw,500px);}
+.pcard.sm3{grid-column:span 4;height:clamp(200px,26vw,370px);}
+.pcard.sm4{grid-column:span 5;height:clamp(200px,26vw,370px);}
+.pcard.sm5{grid-column:span 3;height:clamp(200px,26vw,370px);}
+.pcard img{width:100%;height:100%;object-fit:cover;transition:transform .8s,filter .5s;filter:brightness(.7);}
+.pcard:hover img{transform:scale(1.05);filter:brightness(.42);}
+.povl{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 55%);}
+.pinfo{position:absolute;bottom:0;left:0;right:0;padding:clamp(18px,3vw,30px) clamp(16px,2.5vw,26px);}
+.pcat{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:7px;}
+.pname{font-family:var(--serif);font-size:clamp(17px,2.3vw,23px);font-weight:300;color:#fff;}
+.pyear{font-size:11px;color:rgba(255,255,255,.3);margin-top:4px;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s;}
+.pmore{display:inline-block;margin-top:8px;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);opacity:0;transform:translateY(6px);transition:opacity .3s .1s,transform .3s .1s;}
+.pcard:hover .pyear,.pcard:hover .pmore{opacity:1;transform:translateY(0);}
+.pcard.off{display:none;}
+
+/* ── TESTIMONIAL ── */
+#testi{padding:clamp(56px,8vw,88px) 6%;background:var(--gold);display:flex;align-items:center;gap:clamp(28px,6vw,80px);flex-wrap:wrap;}
+.tq{font-family:var(--serif);font-size:clamp(20px,3vw,34px);font-weight:300;font-style:italic;color:var(--black);line-height:1.55;flex:1;min-width:220px;}
+.ta{flex-shrink:0;}
+.tan{font-size:13px;font-weight:500;color:var(--black);letter-spacing:2px;text-transform:uppercase;}
+.tar{font-size:11px;color:rgba(0,0,0,.5);margin-top:5px;letter-spacing:1px;}
+
+/* ── CONTACT ── */
+#contact{padding:var(--pad);background:var(--dark3);display:grid;grid-template-columns:1fr 1fr;gap:clamp(40px,8vw,100px);align-items:start;}
+.cinfo p{font-size:14px;line-height:2;color:rgba(255,255,255,.62);margin-bottom:40px;}
+.citem{display:flex;align-items:flex-start;gap:16px;margin-bottom:26px;}
+.cicon{width:42px;height:42px;border:.5px solid rgba(201,169,110,.28);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:16px;flex-shrink:0;}
+.citem strong{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:4px;font-weight:400;}
+.citem span{font-size:14px;color:#fff;font-weight:300;}
+.cform{display:flex;flex-direction:column;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:0 22px;}
+.fg{display:flex;flex-direction:column;}
+.fg label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:7px;font-weight:400;}
+.fg input,.fg textarea,.fg select{width:100%;background:transparent;border:none;border-bottom:.5px solid rgba(201,169,110,.22);color:#fff;font-family:var(--sans);font-size:13px;font-weight:300;padding:12px 0;outline:none;margin-bottom:28px;transition:border-color .3s;-webkit-appearance:none;}
+.fg select option{background:#111;color:#fff;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-bottom-color:var(--gold);}
+.fg textarea{resize:none;}
+.cform .btn-g{align-self:flex-start;margin-top:8px;}
+
+/* ── FOOTER ── */
+footer{background:var(--black);border-top:.5px solid rgba(201,169,110,.1);padding:clamp(44px,7vw,70px) 6% clamp(28px,4vw,44px);display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(28px,5vw,60px);}
+.flogo{font-family:var(--serif);font-size:24px;font-weight:300;letter-spacing:5px;text-transform:uppercase;margin-bottom:12px;}
+.flogo span{color:var(--gold);}
+.ftag{font-size:12px;color:rgba(255,255,255,.28);line-height:1.9;}
+.ftitle{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:400;}
+.flinks li{margin-bottom:11px;}
+.flinks a{font-size:13px;color:rgba(255,255,255,.3);font-weight:300;transition:color .3s;}
+.flinks a:hover{color:var(--gold);}
+.fbot{background:var(--black);border-top:.5px solid rgba(255,255,255,.05);padding:20px 6%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.fcopy{font-size:11px;color:rgba(255,255,255,.15);letter-spacing:1px;}
+.fsocial{display:flex;gap:18px;}
+.fsocial a{font-size:10px;letter-spacing:2px;color:rgba(255,255,255,.2);text-transform:uppercase;transition:color .3s;}
+.fsocial a:hover{color:var(--gold);}
+.devcredit{background:linear-gradient(90deg,#0a0020,#0b1540,#0a0020);padding:14px 6%;text-align:center;border-top:.5px solid rgba(201,169,110,.1);}
+.devcredit span{font-size:11px;font-weight:300;letter-spacing:1px;color:rgba(255,255,255,.35);}
+.devlink{font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(90deg,#c9a96e,#ff6ec7,#5eb8ff,#a78bfa,#c9a96e);background-size:300% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 2.8s linear infinite;}
+
+/* ── ANİMASYONLAR ── */
+@keyframes fup{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fin{from{opacity:0;}to{opacity:1;}}
+@keyframes bounce{0%,100%{transform:translateY(0);opacity:1;}50%{transform:translateY(7px);opacity:.3;}}
+@keyframes shimmer{0%{background-position:0% center;}100%{background-position:300% center;}}
+
+/* ════════ MOBİL ════════ */
+
+/* Tablet */
+@media(max-width:1024px){
+  .pgrid{grid-template-columns:1fr 1fr;gap:10px;}
+  .pcard.lg,.pcard.sm,.pcard.sm3,.pcard.sm4,.pcard.sm5{grid-column:span 1;height:clamp(200px,32vw,320px);}
+}
+
+/* Mobil */
+@media(max-width:768px){
+  :root{--nav-h:62px;}
+
+  /* Nav mobil */
+  .nlinks{position:fixed;top:0;right:-100%;width:min(280px,80vw);height:100svh;background:rgba(7,7,7,.98);backdrop-filter:blur(20px);flex-direction:column;justify-content:center;align-items:flex-start;gap:30px;padding:0 40px;z-index:550;border-left:.5px solid rgba(201,169,110,.1);transition:right .4s cubic-bezier(.4,0,.2,1);}
+  .nlinks.open{right:0;}
+  .nlink{font-size:15px;letter-spacing:3px;color:rgba(255,255,255,.75);}
+  .nright{display:none;}
+  .hburger{display:flex;}
+
+  /* Hero */
+  .hstats{display:none;}
+  .hscroll{display:none;}
+
+  /* About */
+  #about{grid-template-columns:1fr;}
+  .aimgs{height:clamp(260px,70vw,360px);margin-bottom:16px;}
+  .abadge{left:0;bottom:16px;}
+
+  /* Services */
+  .svgrid{grid-template-columns:1fr;}
+  .scard{height:280px;}
+  .sdesc{max-height:80px;opacity:1;}
+  .smore{opacity:1;}
+
+  /* Projects */
+  .pgrid{grid-template-columns:1fr;gap:10px;}
+  .pcard.lg,.pcard.sm,.pcard.sm3,.pcard.sm4,.pcard.sm5{grid-column:span 1;height:clamp(200px,60vw,300px);}
+  .phead{flex-direction:column;align-items:flex-start;}
+  .pyear,.pmore{opacity:1;transform:translateY(0);}
+
+  /* Testi */
+  #testi{flex-direction:column;gap:22px;}
+  .ta{align-self:flex-end;}
+
+  /* Contact */
+  #contact{grid-template-columns:1fr;gap:44px;}
+  .frow{grid-template-columns:1fr;}
+
+  /* Footer */
+  footer{grid-template-columns:1fr;gap:32px;}
+  .fbot{flex-direction:column;text-align:center;}
+}
+
+/* Küçük mobil */
+@media(max-width:420px){
+  .hbtns{flex-direction:column;}
+  .btn-g,.btn-o{width:100%;justify-content:center;text-align:center;}
+  .ftabs{gap:4px;}
+  .ftab{padding:8px 12px;font-size:9px;}
+}
+</style>
 </head>
-
 <body>
 
-<!-- Navbar -->
-<header class="header" id="header">
-<div class="container nav-wrap">
+<!-- ═══ MATRİX GİRİŞ ═══ -->
+<div id="intro">
+  <canvas id="mcanvas"></canvas>
+  <div id="mlogo">
+    <span class="big">CRN</span>
+    <span class="mid">Creative Design</span>
+    <span class="sm">Mimari &amp; İç Tasarım</span>
+  </div>
+  <div id="mbar-wrap"><div id="mbar"></div></div>
+  <button id="mskip" onclick="skipIntro()">Geç ›</button>
+</div>
 
-<a href="#" class="logo">CRN Creative Design</a>
+<!-- ═══ ANA SİTE ═══ -->
+<div id="site">
 
-<nav class="nav">
-<a href="#home">Ana Sayfa</a>
-<a href="#about">Hakkımızda</a>
-<a href="#services">Hizmetler</a>
-<a href="#projects">Projeler</a>
-<a href="#contact">İletişim</a>
+<!-- NAV -->
+<nav id="nav">
+  <a href="#home" class="nlogo">CRN <span>Creative</span> Design</a>
+  <button class="hburger" id="hb" aria-label="Menü"><span></span><span></span><span></span></button>
+  <ul class="nlinks" id="nl">
+    <li><a href="#home"     class="nlink" onclick="closeMenu()">Ana Sayfa</a></li>
+    <li><a href="#about"    class="nlink" onclick="closeMenu()">Hakkımızda</a></li>
+    <li><a href="#services" class="nlink" onclick="closeMenu()">Hizmetler</a></li>
+    <li><a href="#projects" class="nlink" onclick="closeMenu()">Projeler</a></li>
+    <li><a href="#contact"  class="nlink" onclick="closeMenu()">İletişim</a></li>
+  </ul>
+  <div class="nright">
+    <button class="langb">TR | EN</button>
+    <a href="#contact" class="ncta">Teklif Al</a>
+  </div>
 </nav>
+<div class="novl" id="novl" onclick="closeMenu()"></div>
 
-<div class="lang-switch">
-<span>TR</span> | <span>EN</span>
-</div>
-
-<div class="menu-btn" id="menuBtn">☰</div>
-
-</div>
-</header>
-
-<!-- Hero -->
-<section class="hero" id="home">
-
-<video autoplay muted loop playsinline class="hero-video">
-<source src="hero.mp4" type="video/mp4">
-</video>
-
-<div class="overlay"></div>
-
-<div class="hero-content container">
-
-<h1>Yaşam Alanlarını Prestije Dönüştürüyoruz</h1>
-
-<p>
-Villa, ofis, plaza ve premium yaşam alanlarında
-özgün mimari çözümler sunuyoruz.
-</p>
-
-<div class="hero-buttons">
-<a href="#contact" class="btn gold">Teklif Al</a>
-<a href="https://wa.me/905079002639" target="_blank" class="btn light">WhatsApp</a>
-</div>
-
-</div>
-
+<!-- HERO -->
+<section id="home">
+  <div class="hmedia">
+    <video autoplay muted loop playsinline id="hvid">
+      <source src="hero.mp4" type="video/mp4">
+    </video>
+    <div class="hfallback" id="hfb"></div>
+  </div>
+  <div class="hovl"></div>
+  <div class="hgrid"></div>
+  <div class="hcontent">
+    <div class="eyebrow"><div class="eline"></div><span>Mimari &amp; İç Tasarım</span></div>
+    <h1 class="htitle">Yaşam Alanlarını<br><em>Prestije</em><br>Dönüştürüyoruz</h1>
+    <p class="hdesc">Villa, ofis, plaza ve premium yaşam alanlarında özgün mimari çözümler sunuyoruz. Her projede estetik ve işlevselliği bir araya getiriyoruz.</p>
+    <div class="hbtns">
+      <a href="#contact" class="btn-g">Teklif Al</a>
+      <a href="https://wa.me/905079002639" target="_blank" rel="noopener" class="btn-o"><span class="wdot"></span>WhatsApp</a>
+    </div>
+  </div>
+  <div class="hstats">
+    <div class="stat"><div class="n">150+</div><span class="l">Tamamlanan Proje</span></div>
+    <div class="stat"><div class="n">12</div><span class="l">Yıl Deneyim</span></div>
+    <div class="stat"><div class="n">8</div><span class="l">Ödül</span></div>
+  </div>
+  <div class="hscroll"><div class="sdot"></div><div class="sline"></div></div>
 </section>
 
-<script src="script.js"></script>
+<!-- HAKKIMIZDA -->
+<section id="about">
+  <div class="aimgs reveal">
+    <img class="aimg1" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=900&q=85" alt="İç Mimari">
+    <img class="aimg2" src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=700&q=80" alt="Dış Cephe">
+    <div class="abadge"><span class="bn">12+</span><span class="bl">Yıl Deneyim</span></div>
+  </div>
+  <div class="atxt reveal">
+    <div class="eyebrow"><div class="eline"></div><span>Hakkımızda</span></div>
+    <h2 class="stitle">Tasarımda <em>Sınırları</em><br>Zorlamak</h2>
+    <p>CRN Creative Design olarak 12 yılı aşkın deneyimimizle iç ve dış mimari alanında özgün ve sürdürülebilir projeler üretiyoruz.</p>
+    <p>Villa, ofis, plaza ve konut projelerinde müşterilerimizin hayallerini en ince detayına kadar hayata geçiriyor; mekânları işlevsellik ve estetik denge içinde tasarlıyoruz.</p>
+    <ul class="alist">
+      <li>Villa &amp; Rezidans</li><li>Ofis &amp; Plaza</li>
+      <li>İç Mimari</li><li>Dış Cephe Tasarımı</li>
+      <li>Peyzaj Düzenleme</li><li>3D Görselleştirme</li>
+    </ul>
+  </div>
+</section>
 
+<!-- HİZMETLER -->
+<section id="services">
+  <div class="svhead reveal">
+    <div class="eyebrow"><div class="eline"></div><span>Hizmetler</span></div>
+    <h2 class="stitle">Neler <em>Sunuyoruz</em></h2>
+  </div>
+  <div class="svgrid">
+    <div class="scard reveal">
+      <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80" alt="İç Mimari">
+      <div class="sbody">
+        <span class="snum">01</span>
+        <h3 class="stcard">İç Mimari Tasarım</h3>
+        <p class="sdesc">Yaşam ve çalışma alanlarını kişiye özel, estetik ve fonksiyonel mekânlara dönüştürüyoruz.</p>
+        <span class="smore">Detaylar →</span>
+      </div>
+    </div>
+    <div class="scard reveal">
+      <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80" alt="Villa">
+      <div class="sbody">
+        <span class="snum">02</span>
+        <h3 class="stcard">Villa &amp; Konut</h3>
+        <p class="sdesc">Bireysel ve aile yaşam alanları için sıfırdan konsept geliştirip uygulama sürecini yönetiyoruz.</p>
+        <span class="smore">Detaylar →</span>
+      </div>
+    </div>
+    <div class="scard reveal">
+      <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80" alt="Ticari">
+      <div class="sbody">
+        <span class="snum">03</span>
+        <h3 class="stcard">Ticari &amp; Ofis</h3>
+        <p class="sdesc">Kurumsal kimliğinizi yansıtan, verimliliği artıran ofis ve ticari alan tasarımları sunuyoruz.</p>
+        <span class="smore">Detaylar →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJELER -->
+<section id="projects">
+  <div class="phead">
+    <div class="reveal">
+      <div class="eyebrow"><div class="eline"></div><span>Projeler</span></div>
+      <h2 class="stitle">Seçili <em>Çalışmalar</em></h2>
+    </div>
+    <div class="ftabs">
+      <button class="ftab on"  data-f="all">Tümü</button>
+      <button class="ftab"     data-f="ic">İç Mimari</button>
+      <button class="ftab"     data-f="konut">Konut</button>
+      <button class="ftab"     data-f="ticari">Ticari</button>
+    </div>
+  </div>
+  <div class="pgrid">
+    <div class="pcard lg" data-c="ic">
+      <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1200&q=80" alt="Ege Residence">
+      <div class="povl"></div>
+      <div class="pinfo"><div class="pcat">İç Mimari</div><div class="pname">Ege Residence</div><div class="pyear">2024</div><a href="#contact" class="pmore">İncele →</a></div>
+    </div>
+    <div class="pcard sm" data-c="konut">
+      <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?w=900&q=80" alt="Boğaz Villa">
+      <div class="povl"></div>
+      <div class="pinfo"><div class="pcat">Villa</div><div class="pname">Boğaz Villa</div><div class="pyear">2023</div><a href="#contact" class="pmore">İncele →</a></div>
+    </div>
+    <div class="pcard sm3" data-c="ticari">
+      <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&q=80" alt="Merkez Plaza">
+      <div class="povl"></div>
+      <div class="pinfo"><div class="pcat">Ticari</div><div class="pname">Merkez Plaza</div><div class="pyear">2023</div><a href="#contact" class="pmore">İncele →</a></div>
+    </div>
+    <div class="pcard sm4" data-c="ic">
+      <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=80" alt="Penthouse Süit">
+      <div class="povl"></div>
+      <div class="pinfo"><div class="pcat">İç Mimari</div><div class="pname">Penthouse Süit</div><div class="pyear">2022</div><a href="#contact" class="pmore">İncele →</a></div>
+    </div>
+    <div class="pcard sm5" data-c="konut">
+      <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=80" alt="Sahil Yazlık">
+      <div class="povl"></div>
+      <div class="pinfo"><div class="pcat">Konut</div><div class="pname">Sahil Yazlık</div><div class="pyear">2022</div><a href="#contact" class="pmore">İncele →</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTİMONİAL -->
+<div id="testi" class="reveal">
+  <p class="tq">"CRN Creative Design hayallerimi aşan bir mekân tasarladı. Her detay düşünülmüş, her köşe estetik ve işlevsel."</p>
+  <div class="ta"><div class="tan">Mehmet Yılmaz</div><div class="tar">Villa Projesi — 2024</div></div>
+</div>
+
+<!-- İLETİŞİM -->
+<section id="contact">
+  <div class="cinfo reveal">
+    <div class="eyebrow"><div class="eline"></div><span>İletişim</span></div>
+    <h2 class="stitle">Projenizi<br><em>Konuşalım</em></h2>
+    <p>Hayalinizdeki mekânı birlikte tasarlayalım. Size özel bir konsept geliştirmek için bizimle iletişime geçin.</p>
+    <div class="citem"><div class="cicon">✆</div><div><strong>Telefon</strong><span>+90 507 900 26 39</span></div></div>
+    <div class="citem"><div class="cicon">✉</div><div><strong>E-posta</strong><span>info@crncreativedesign.com</span></div></div>
+    <div class="citem"><div class="cicon">◎</div><div><strong>Konum</strong><span>Türkiye</span></div></div>
+  </div>
+  <form class="cform reveal" onsubmit="return false;">
+    <div class="frow">
+      <div class="fg"><label>Ad Soyad</label><input type="text" placeholder="Adınız"></div>
+      <div class="fg"><label>E-posta</label><input type="email" placeholder="email@adresiniz.com"></div>
+    </div>
+    <div class="fg">
+      <label>Proje Türü</label>
+      <select><option value="">Seçiniz…</option><option>Villa &amp; Konut</option><option>Ofis &amp; Ticari</option><option>İç Mimari</option><option>Diğer</option></select>
+    </div>
+    <div class="fg"><label>Mesajınız</label><textarea rows="4" placeholder="Projenizi kısaca anlatın…"></textarea></div>
+    <button type="submit" class="btn-g">Gönder</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div><div class="flogo">CRN <span>Creative</span></div><p class="ftag">Yaşam alanlarını prestije dönüştüren özgün mimari çözümler.</p></div>
+  <div>
+    <div class="ftitle">Hızlı Erişim</div>
+    <ul class="flinks">
+      <li><a href="#home">Ana Sayfa</a></li><li><a href="#about">Hakkımızda</a></li>
+      <li><a href="#services">Hizmetler</a></li><li><a href="#projects">Projeler</a></li>
+      <li><a href="#contact">İletişim</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="ftitle">İletişim</div>
+    <ul class="flinks">
+      <li><a href="tel:+905079002639">+90 507 900 26 39</a></li>
+      <li><a href="mailto:info@crncreativedesign.com">info@crncreativedesign.com</a></li>
+      <li><a href="https://wa.me/905079002639" target="_blank">WhatsApp</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="fbot">
+  <span class="fcopy">© 2025 CRN Creative Design. Tüm hakları saklıdır.</span>
+  <div class="fsocial"><a href="#" target="_blank">Instagram</a><a href="#" target="_blank">LinkedIn</a></div>
+</div>
+<div class="devcredit">
+  <span>Bu web sitesinin geliştiricisi ve reklam yöneticisi &nbsp;</span>
+  <a href="http://www.wixmedya.com" target="_blank" rel="noopener" class="devlink">www.wixmedya.com</a>
+</div>
+
+</div><!-- /site -->
+
+<script>
+// ═══ MATRİX ═══
+const canvas = document.getElementById('mcanvas');
+const ctx    = canvas.getContext('2d');
+let W, H, cols, drops;
+function resizeCanvas(){
+  W = canvas.width  = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  cols  = Math.floor(W / 20);
+  drops = Array(cols).fill(1);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+const chars = 'アイウエオカキクケコサシスセソタチツテトハヒフヘホマミムメモヤユヨラリルレロワン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+function drawMatrix(){
+  ctx.fillStyle = 'rgba(0,0,0,0.06)';
+  ctx.fillRect(0,0,W,H);
+  for(let i=0;i<cols;i++){
+    const ch = chars[Math.floor(Math.random()*chars.length)];
+    const x  = i*20, y = drops[i]*20;
+    const b  = Math.random();
+    ctx.fillStyle = b>.93?'#fff': b>.7?'#c9a96e':'rgba(201,169,110,0.38)';
+    ctx.font = '14px monospace';
+    ctx.fillText(ch,x,y);
+    if(y>H && Math.random()>.975) drops[i]=0;
+    drops[i]++;
+  }
+}
+const mInt = setInterval(drawMatrix, 40);
+
+// Logo + progress
+const mlogo = document.getElementById('mlogo');
+const mbar  = document.getElementById('mbar');
+const TOTAL = 3800;
+const t0    = Date.now();
+setTimeout(()=> mlogo.classList.add('vis'), 600);
+
+const pInt = setInterval(()=>{
+  const pct = Math.min(100,(Date.now()-t0)/TOTAL*100);
+  mbar.style.width = pct+'%';
+  if(pct>=100){ clearInterval(pInt); finishIntro(); }
+},50);
+
+function finishIntro(){
+  clearInterval(mInt);
+  const el = document.getElementById('intro');
+  el.style.transition='opacity 1s ease';
+  el.style.opacity='0';
+  setTimeout(()=>{ el.style.display='none'; document.getElementById('site').classList.add('vis'); },1000);
+}
+function skipIntro(){
+  clearInterval(mInt); clearInterval(pInt); finishIntro();
+}
+
+// ═══ VİDEO FALLBACK ═══
+const vid = document.getElementById('hvid');
+const hfb = document.getElementById('hfb');
+vid.addEventListener('error',()=>{ vid.style.display='none'; hfb.classList.add('show'); });
+vid.addEventListener('loadeddata',()=>{ hfb.style.display='none'; });
+setTimeout(()=>{ if(vid.readyState===0){ vid.style.display='none'; hfb.classList.add('show'); } },3000);
+
+// ═══ NAV ═══
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('sc', window.scrollY>60);
+});
+const hb  = document.getElementById('hb');
+const nl  = document.getElementById('nl');
+const novl= document.getElementById('novl');
+hb.addEventListener('click',()=>{
+  hb.classList.toggle('open');
+  nl.classList.toggle('open');
+  novl.classList.toggle('show');
+  document.body.style.overflow = nl.classList.contains('open')?'hidden':'';
+});
+function closeMenu(){
+  hb.classList.remove('open');
+  nl.classList.remove('open');
+  novl.classList.remove('show');
+  document.body.style.overflow='';
+}
+
+// ═══ PROJE FİLTRE ═══
+document.querySelectorAll('.ftab').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    const f = btn.dataset.f;
+    document.querySelectorAll('.pcard').forEach(c=>{
+      c.classList.toggle('off', f!=='all' && c.dataset.c!==f);
+    });
+  });
+});
+
+// ═══ SCROLL REVEAL ═══
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
 </body>
 </html>
