@@ -307,7 +307,8 @@ footer{background:var(--black);border-top:.5px solid rgba(201,169,110,.1);paddin
 <!-- HERO -->
 <section id="home">
   <div class="hmedia">
-    <video autoplay muted loop playsinline id="hvid">
+    <video autoplay muted loop playsinline id="hvid" preload="auto">
+      <source src="./hero.mp4" type="video/mp4">
       <source src="hero.mp4" type="video/mp4">
     </video>
     <div class="hfallback" id="hfb"></div>
@@ -444,7 +445,7 @@ footer{background:var(--black);border-top:.5px solid rgba(201,169,110,.1);paddin
     <h2 class="stitle">Projenizi<br><em>Konuşalım</em></h2>
     <p>Hayalinizdeki mekânı birlikte tasarlayalım. Size özel bir konsept geliştirmek için bizimle iletişime geçin.</p>
     <div class="citem"><div class="cicon">✆</div><div><strong>Telefon</strong><span>+90 507 900 26 39</span></div></div>
-    <div class="citem"><div class="cicon">✉</div><div><strong>E-posta</strong><span>info@crncreativedesign.com</span></div></div>
+    <div class="citem"><div class="cicon">✉</div><div><strong>E-posta</strong><span>crncreativedesign@gmail.com</span></div></div>
     <div class="citem"><div class="cicon">◎</div><div><strong>Konum</strong><span>Türkiye</span></div></div>
   </div>
   <form class="cform reveal" onsubmit="return false;">
@@ -476,7 +477,7 @@ footer{background:var(--black);border-top:.5px solid rgba(201,169,110,.1);paddin
     <div class="ftitle">İletişim</div>
     <ul class="flinks">
       <li><a href="tel:+905079002639">+90 507 900 26 39</a></li>
-      <li><a href="mailto:info@crncreativedesign.com">info@crncreativedesign.com</a></li>
+      <li><a href="mailto:crncreativedesign@gmail.com">crncreativedesign@gmail.com</a></li>
       <li><a href="https://wa.me/905079002639" target="_blank">WhatsApp</a></li>
     </ul>
   </div>
@@ -550,9 +551,26 @@ function skipIntro(){
 // ═══ VİDEO FALLBACK ═══
 const vid = document.getElementById('hvid');
 const hfb = document.getElementById('hfb');
-vid.addEventListener('error',()=>{ vid.style.display='none'; hfb.classList.add('show'); });
-vid.addEventListener('loadeddata',()=>{ hfb.style.display='none'; });
-setTimeout(()=>{ if(vid.readyState===0){ vid.style.display='none'; hfb.classList.add('show'); } },3000);
+
+function showFallback(){
+  vid.style.display='none';
+  hfb.classList.add('show');
+}
+
+vid.addEventListener('error', showFallback);
+vid.addEventListener('loadeddata', ()=>{ hfb.style.display='none'; vid.play(); });
+
+// 5 saniye içinde yüklenmediyse yedek görseli göster
+setTimeout(()=>{
+  if(vid.readyState < 2){
+    showFallback();
+  }
+}, 5000);
+
+// Sayfa görünür olduğunda tekrar dene
+document.addEventListener('visibilitychange', ()=>{
+  if(!document.hidden && vid.paused && vid.readyState >= 2) vid.play();
+});
 
 // ═══ NAV ═══
 window.addEventListener('scroll',()=>{
